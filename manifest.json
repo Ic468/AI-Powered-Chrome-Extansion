@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "AIEverywhere",
+    "version": "1.0",
+    "permissions": [
+      "activeTab",
+      "contextMenus",
+      "storage"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    }
+}
