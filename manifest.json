@@ -2,12 +2,19 @@
     "manifest_version": 3,
     "name": "AIEverywhere",
     "version": "1.0",
+    "icons": {
+        "128": "./notification_icon.png"
+    },
     "permissions": [
       "activeTab",
       "contextMenus",
-      "storage"
+      "storage",
+      "notifications"
     ],
     "background": {
       "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
     }
 }
