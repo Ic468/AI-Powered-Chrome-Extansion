@@ -56,51 +56,44 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     callOpenAI(prompt, temperature, tab.id);
 });
 
-function callOpenAI(prompt, temperature, tabId) {
-    const API_KEY = 'sk-proj-PXWAJnhpEA1EDHL9euhuT3BlbkFJMjDmn9Ai8gtPLACc4p3T';  
-    const endpoint = 'https://api.openai.com/v1/engines/davinci/completions';
+async function callOpenAI(prompt, temperature, tabId) {
+    const API_KEY = 'sk-proj-g4MaPoLi8qj7Od9bH1AGT3BlbkFJy6anUchggcG5G6AUUHgz';  
+    const endpoint = 'https://api.openai.com/v1/chat/completions';
 
-    fetch(endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            prompt: prompt,
-            max_tokens: 150,
-            temperature: temperature
-        })
-    })
-    .then(response => {
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4",
+                messages: [{ "role": "user", "content": prompt }],
+                max_tokens: 150,
+                temperature: temperature
+            })
+        });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.choices && data.choices.length > 0 && data.choices[0].text.trim() !== '') {
-            chrome.storage.local.set({results: data.choices[0].text}, function() {
-                console.log('Results saved.');
-                showNotification("AI Response", data.choices[0].text);
-            });
-        } else {
-            throw new Error('No valid response in data');
-        }
-    })
-    .catch(error => {
-        console.error('Error with the OpenAI API:', error);
-        showNotification("AI Response", "Failed to get a valid response from the API.");
-    });
+
+        const data = await response.json();
+        const resultMessage = data.choices[0].message.content;
+
+        // Store the result in Chrome's local storage
+        chrome.storage.local.set({results: resultMessage}, function() {
+            openResultsPage(); // This will open the popup.html in a new tab with the results
+        });
+        
+    } catch (error) {
+        console.error('Failed to fetch AI response:', error);
+        chrome.runtime.sendMessage({ action: "updateResult", message: 'Error: ' + error.message });
+    }
 }
 
-function showNotification(title, message) {
-    chrome.notifications.create('', {
-        type: 'basic',
-        title: title,
-        iconUrl: './notification_icon.png',
-        message: message,
-        priority: 2
-    });
+function openResultsPage() {
+    chrome.tabs.create({url: chrome.runtime.getURL('popup.html')});
 }
 
