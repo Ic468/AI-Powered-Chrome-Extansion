@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     // Determine which menu item was clicked and set the appropriate prompt and temperature
     switch (info.menuItemId) {
         case "improveEnglish":
-            prompt = `Please rewrite this text in refined English:\n\n${info.selectionText}`;
+            prompt = `Imagine you are an English teacher correcting a student's work. If the following text is in English, please rewrite it to ensure it is grammatically correct, uses refined academic language, and is stylistically polished. If the text is not in English, return a message saying "Non-English text detected. Please select English text.":\n\n${info.selectionText}`;
             break;
         case "improveEnglishCreative":
             prompt = `Please rewrite this text in a creative and engaging manner:\n\n${info.selectionText}`;
@@ -86,7 +86,7 @@ async function callOpenAI(prompt, temperature, tabId) {
         chrome.storage.local.set({results: resultMessage}, function() {
             openResultsPage(); // This will open the popup.html in a new tab with the results
         });
-        
+
     } catch (error) {
         console.error('Failed to fetch AI response:', error);
         chrome.runtime.sendMessage({ action: "updateResult", message: 'Error: ' + error.message });
