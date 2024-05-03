@@ -35,18 +35,19 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
             prompt = `Imagine you are an English teacher correcting a student's work. If the following text is in English, please rewrite it to ensure it is grammatically correct, uses refined academic language, and is stylistically polished. If the text is not in English, return a message saying "Non-English text detected. Please select English text.":\n\n${info.selectionText}`;
             break;
         case "improveEnglishCreative":
-            prompt = `Please rewrite this text in a creative and engaging manner:\n\n${info.selectionText}`;
-            temperature = 0.9;
+            prompt = `Imagine you are an English teacher correcting a student's work. If the following text is in English, please rewrite it to ensure it is grammatically correct, uses refined academic language, and is stylistically polished. If the text is not in English, return a message saying "Non-English text detected. Please select English text.":\n\n${info.selectionText}`;
+            temperature = 1;
             break;
         case "addCommentsToCode":
-            prompt = `Please add comments to this code explaining what each part does:\n\n${info.selectionText}`;
+            prompt = `If the following text is programming code, please add progammer comments to explain what each part of the code does. If this text is not code, return a message saying "This is not valid code. Please select a valid code snippet.":\n\n${info.selectionText}`;
+            temperature = 0.3;
             break;
         case "summarizeSingleParagraph":
             prompt = `Summarize this text in a single paragraph:\n\n${info.selectionText}`;
             break;
         case "aiQuiz":
-            prompt = `Create 10 multiple choice questions based on this text, with 4 options each, and mark the correct answer:\n\n${info.selectionText}`;
-            temperature = 0.7;
+            prompt = `Generate 10 multiple-choice questions based on the following text. Each question should have 4 choices, and clearly indicate the correct answer. Format the correct answer in bold and green text:\n\n${info.selectionText}`;
+            temperature = 0.9;
             break;
         default:
             console.log("Unknown action");
@@ -70,7 +71,7 @@ async function callOpenAI(prompt, temperature, tabId) {
             body: JSON.stringify({
                 model: "gpt-4",
                 messages: [{ "role": "user", "content": prompt }],
-                max_tokens: 150,
+                max_tokens: 600,
                 temperature: temperature
             })
         });
