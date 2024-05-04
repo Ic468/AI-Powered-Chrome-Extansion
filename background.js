@@ -46,7 +46,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
             prompt = `Summarize this text in a single paragraph:\n\n${info.selectionText}`;
             break;
         case "aiQuiz":
-            prompt = `Generate 10 multiple-choice questions based on the following text. Each question should have 4 choices, and clearly indicate the correct answer. Format the correct answer in bold and green text:\n\n${info.selectionText}`;
+            prompt = `Generate 10 multiple-choice questions based on the following text. Each question should have 4 options, formatted as: Question: [question text] Options: A) [option 1] B) [option 2] C) [option 3] D) [option 4] Answer: [correct letter].\n\n${info.selectionText}`;
             temperature = 0.9;
             break;
         default:
