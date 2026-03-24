@@ -58,7 +58,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 async function callOpenAI(prompt, temperature, tabId) {
-    const API_KEY = 'sk-proj-g4MaPoLi8qj7Od9bH1AGT3BlbkFJy6anUchggcG5G6AUUHgz';  
+    const API_KEY = '';  
     const endpoint = 'https://api.openai.com/v1/chat/completions';
 
     try {
